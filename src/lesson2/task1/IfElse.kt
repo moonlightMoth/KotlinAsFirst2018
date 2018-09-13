@@ -70,7 +70,7 @@ fun ageDescription(age: Int): String
     var year: String
     val lastDigit = age % 10
 
-    if (age % 100 != 11 && age % 100 != 12)
+    if (!(age % 100 in 10..20))
         if (lastDigit == 1)
             year = "год"
         else if (lastDigit == 2 || lastDigit == 3 || lastDigit == 4)
@@ -206,13 +206,13 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int
 {
     if (b < c || d < a)
         return -1
-    else if (a < c && c < b && b < d)
+    else if (a <= c && c <= b && b <= d)
         return b - c
-    else if (c < a && a < d && d < b)
+    else if (c <= a && a <= d && d <= b)
         return d - a
-    else if (a < c && d < b)
+    else if (a <= c && d <= b)
         return d - c
-    else if (c < a && b < d)
+    else if (c <= a && b <= d)
         return b - a
     return 0
 }
