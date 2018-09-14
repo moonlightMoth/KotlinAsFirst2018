@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -13,9 +14,11 @@ import kotlin.math.sqrt
  *
  * Найти число корней квадратного уравнения ax^2 + bx + c = 0
  */
-fun quadraticRootNumber(a: Double, b: Double, c: Double): Int {
+fun quadraticRootNumber(a: Double, b: Double, c: Double): Int
+{
     val discriminant = discriminant(a, b, c)
-    return when {
+    return when
+    {
         discriminant > 0.0 -> 2
         discriminant == 0.0 -> 1
         else -> 0
@@ -27,7 +30,8 @@ fun quadraticRootNumber(a: Double, b: Double, c: Double): Int {
  *
  * Получить строковую нотацию для оценки по пятибалльной системе
  */
-fun gradeNotation(grade: Int): String = when (grade) {
+fun gradeNotation(grade: Int): String = when (grade)
+{
     5 -> "отлично"
     4 -> "хорошо"
     3 -> "удовлетворительно"
@@ -40,23 +44,25 @@ fun gradeNotation(grade: Int): String = when (grade) {
  *
  * Найти наименьший корень биквадратного уравнения ax^4 + bx^2 + c = 0
  */
-fun minBiRoot(a: Double, b: Double, c: Double): Double {
+fun minBiRoot(a: Double, b: Double, c: Double): Double
+{
     // 1: в главной ветке if выполняется НЕСКОЛЬКО операторов
-    if (a == 0.0) {
+    if (a == 0.0)
+    {
         if (b == 0.0) return Double.NaN // ... и ничего больше не делать
-        val bc = -c / b
+        val bc = - c / b
         if (bc < 0.0) return Double.NaN // ... и ничего больше не делать
-        return -sqrt(bc)
+        return - sqrt(bc)
         // Дальше функция при a == 0.0 не идёт
     }
     val d = discriminant(a, b, c)   // 2
     if (d < 0.0) return Double.NaN  // 3
     // 4
-    val y1 = (-b + sqrt(d)) / (2 * a)
-    val y2 = (-b - sqrt(d)) / (2 * a)
+    val y1 = (- b + sqrt(d)) / (2 * a)
+    val y2 = (- b - sqrt(d)) / (2 * a)
     val y3 = max(y1, y2)       // 5
     if (y3 < 0.0) return Double.NaN // 6
-    return -sqrt(y3)           // 7
+    return - sqrt(y3)           // 7
 }
 
 /**
@@ -67,18 +73,17 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String
 {
-    var year: String
+    val year: String
     val lastDigit = age % 10
 
-    if (!(age % 100 in 10..20))
-        if (lastDigit == 1)
-            year = "год"
-        else if (lastDigit == 2 || lastDigit == 3 || lastDigit == 4)
-            year = "года"
-        else year = "лет"
-    else
-        year = "лет"
-    return age.toString() + " " + year;
+    year = when
+    {
+        age % 100 in 10..20 -> "лет"
+        lastDigit == 1 -> "год"
+        lastDigit in 2..4 -> "года"
+        else -> "лет"
+    }
+    return "$age $year"
 }
 
 /**
@@ -97,11 +102,12 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val thirdPart = t3 * v3
     val halfWay = (firstPart + secondPart + thirdPart) / 2
 
-    if (halfWay <= firstPart)
-        return halfWay / v1
-    else if (halfWay <= firstPart + secondPart)
-        return (halfWay - firstPart) / v2 + t1
-    else return (halfWay - firstPart - secondPart) / v3 + t1 + t2
+    return when
+    {
+        halfWay <= firstPart -> halfWay / v1
+        halfWay <= firstPart + secondPart -> (halfWay - firstPart) / v2 + t1
+        else -> (halfWay - firstPart - secondPart) / v3 + t1 + t2
+    }
 }
 
 /**
@@ -119,15 +125,12 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 {
     var hitCounter = 0
 
-    if(kingX == rookX1 || kingY == rookY1)
-        if (kingX == rookX2 || kingY == rookY2)
-            hitCounter = 3
-        else hitCounter = 1
-    else if(kingX == rookX2 || kingY == rookY2)
+    if (kingX == rookX1 || kingY == rookY1)
+        hitCounter = if (kingX == rookX2 || kingY == rookY2) 3 else 1
+    else if (kingX == rookX2 || kingY == rookY2)
         hitCounter = 2
 
     return hitCounter
-
 }
 
 /**
@@ -146,11 +149,9 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
 {
     var hitCounter = 0
 
-    if(kingX == rookX || kingY == rookY)
-        if (abs(kingX - bishopX) == abs(kingY - bishopY))
-            hitCounter = 3
-        else hitCounter = 1
-    else if(abs(kingX - bishopX) == abs(kingY - bishopY))
+    if (kingX == rookX || kingY == rookY)
+        hitCounter = if (abs(kingX - bishopX) == abs(kingY - bishopY)) 3 else 1
+    else if (abs(kingX - bishopX) == abs(kingY - bishopY))
         hitCounter = 2
 
     return hitCounter
@@ -166,19 +167,17 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int
 {
-    var returnDigit: Int
-    if((a < b + c) && (b < a + c) && (c < a + b))
+    return if ((a < b + c) && (b < a + c) && (c < a + b))
     {
-        if(a == maxOf(a, b, c))
-            returnDigit =  calculateTheorem(a, b, c)
-        else if(b == maxOf(a, b, c))
-            returnDigit =  calculateTheorem(b, c, a)
-        else
-            returnDigit =  calculateTheorem(c, b, a)
+        when
+        {
+            a == maxOf(a, b, c) -> calculateTheorem(a, b, c)
+            b == maxOf(a, b, c) -> calculateTheorem(b, c, a)
+            else -> calculateTheorem(c, b, a)
+        }
     }
     else
-        returnDigit =  -1
-    return returnDigit
+        - 1
 }
 
 fun calculateTheorem(maxNum: Double, b: Double, c: Double): Int
@@ -192,8 +191,6 @@ fun calculateTheorem(maxNum: Double, b: Double, c: Double): Int
 }
 
 
-
-
 /**
  * Средняя
  *
@@ -205,10 +202,10 @@ fun calculateTheorem(maxNum: Double, b: Double, c: Double): Int
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int
 {
     if (b < c || d < a)
-        return -1
-    else if (a <= c && c <= b && b <= d)
+        return - 1
+    else if (c in a..b && b <= d)
         return b - c
-    else if (c <= a && a <= d && d <= b)
+    else if (a in c..d && d <= b)
         return d - a
     else if (a <= c && d <= b)
         return d - c
