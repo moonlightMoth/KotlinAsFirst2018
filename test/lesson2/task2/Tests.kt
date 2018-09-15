@@ -45,6 +45,7 @@ class Tests {
         assertEquals(29, daysInMonth(2, 1996))
         assertEquals(28, daysInMonth(2, 1900))
         assertEquals(29, daysInMonth(2, 2000))
+        assertEquals(29, daysInMonth(2, 1600))
     }
 
     @Test
@@ -64,5 +65,10 @@ class Tests {
         assertTrue(brickPasses(4, 4, 4, 4, 4))
         assertFalse(brickPasses(6, 5, 4, 3, 6))
         assertTrue(brickPasses(3, 2, 1, 1, 2))
+
+        assertTrue(brickPasses(5, 234, 6, 43, 100))
+        assertTrue(brickPasses(43, 2354, 4234, 40000, 40000))
+        assertFalse(brickPasses(1235, 5345, 456, 124145, 46))
+        assertTrue(brickPasses(444444, 44444, 444444, 444444, 444444))
     }
 }
