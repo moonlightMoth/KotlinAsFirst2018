@@ -74,7 +74,7 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int = if (n in 1..2) 1 else fib(n-1) + fib(n-2)
 
 /**
  * Простая
@@ -132,7 +132,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int
+{
+    var x1 = x
+
+    var i = 0
+    while (x1 != 1)
+    {
+        if (x1 % 2 == 0) x1 /= 2 else x1 = 3 * x1 + 1
+        i++
+    }
+    return i
+}
 
 /**
  * Средняя

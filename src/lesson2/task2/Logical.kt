@@ -45,7 +45,7 @@ fun daysInMonth(month: Int, year: Int): Int =
         when (month)
         {
             4, 6, 9, 11 -> 30
-            2 -> if (year % 400 == 0) 29 else if (year % 100 == 0) 28 else if (year % 4 == 0) 29 else 28
+            2 -> if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) 29 else 28
             else -> 31
         }
 
@@ -71,7 +71,7 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean
 {
-    val mass: Array<Int> = arrayOf(a, b, c, r, s)
+    val mass = arrayOf(a, b, c, r, s)
     mass.sort()
 
     var flagR = false
@@ -92,7 +92,6 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean
         {
             sPos = i
             flagS = true
-            continue
         }
     }
 

@@ -69,7 +69,7 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = hours * 3600 + minute
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
-        (sagenes * 48 * 4.445 + arshins * 16 * 4.445 + vershoks * 4.445) / 100
+        4.445 * (sagenes * 48 + arshins * 16 + vershoks) / 100
 
 /**
  * Тривиальная
@@ -78,7 +78,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double =
-        PI * grad / 180 + PI * min / 10800 + PI * sec / 648000
+         PI * (grad.toDouble() / 180 + min.toDouble() / (180 * 60) + sec.toDouble() / (180 * 60 * 60))
 
 /**
  * Тривиальная
@@ -95,7 +95,7 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double =
  * Пользователь задает целое число, большее 100 (например, 3801).
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
-fun thirdDigit(number: Int): Int = (number / 100) % 10
+fun thirdDigit(number: Int): Int = number / 100 % 10
 
 /**
  * Простая
@@ -115,10 +115,11 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double{
-    var s = initial.toDouble()
-    s += (s * percent / 100)
-    s += (s * percent / 100)
-    return s + (s * percent / 100)
+    val decimalPercent:Double = percent.toDouble() / 100
+    return initial * Math.pow(decimalPercent, 3.0) +
+            3 * initial * Math.pow(decimalPercent, 2.0) +
+            3 * initial * decimalPercent +
+            initial
 }
 
 /**
@@ -128,4 +129,4 @@ fun accountInThreeYears(initial: Int, percent: Int): Double{
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
 fun numberRevert(number: Int): Int =
-        ((number % 10) * 100) + (((number / 10) % 10) * 10) + (number / 100)
+        number % 10 * 100 + number / 10 % 10 * 10 + number / 100
