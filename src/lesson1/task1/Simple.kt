@@ -1,8 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson1.task1
 
 
 import kotlin.math.*
+import java.lang.Math.pow
 
 /**
  * Пример
@@ -31,24 +33,26 @@ fun discriminant(a: Double, b: Double, c: Double) = sqr(b) - 4 * a * c
  * Поиск одного из корней квадратного уравнения
  */
 fun quadraticEquationRoot(a: Double, b: Double, c: Double) =
-        (-b + sqrt(discriminant(a, b, c))) / (2 * a)
+        (- b + sqrt(discriminant(a, b, c))) / (2 * a)
 
 /**
  * Пример
  *
  * Поиск произведения корней квадратного уравнения
  */
-fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
+fun quadraticRootProduct(a: Double, b: Double, c: Double): Double
+{
     val sd = sqrt(discriminant(a, b, c))
-    val x1 = (-b + sd) / (2 * a)
-    val x2 = (-b - sd) / (2 * a)
+    val x1 = (- b + sd) / (2 * a)
+    val x2 = (- b - sd) / (2 * a)
     return x1 * x2 // Результат
 }
 
 /**
  * Пример главной функции
  */
-fun main(args: Array<String>) {
+fun main(args: Array<String>)
+{
     val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
     println("Root product: $x1x2")
 }
@@ -78,7 +82,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double =
-         PI * (grad.toDouble() / 180 + min.toDouble() / (180 * 60) + sec.toDouble() / (180 * 60 * 60))
+        PI * (grad.toDouble() / 180 + min.toDouble() / (180 * 60) + sec.toDouble() / (180 * 60 * 60))
 
 /**
  * Тривиальная
@@ -114,10 +118,11 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double{
-    val decimalPercent:Double = percent.toDouble() / 100
-    return initial * Math.pow(decimalPercent, 3.0) +
-            3 * initial * Math.pow(decimalPercent, 2.0) +
+fun accountInThreeYears(initial: Int, percent: Int): Double
+{
+    val decimalPercent = percent.toDouble() / 100
+    return initial * pow(decimalPercent, 3.0) +
+            3 * initial * pow(decimalPercent, 2.0) +
             3 * initial * decimalPercent +
             initial
 }
