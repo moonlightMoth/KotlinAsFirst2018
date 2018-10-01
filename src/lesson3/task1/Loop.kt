@@ -100,8 +100,6 @@ fun digitNumber(n: Int): Int
  */
 fun fib(n: Int): Int
 {
-    if (n == 1 || n == 2) return 1
-
     var a = 1
     var b = 1
 
