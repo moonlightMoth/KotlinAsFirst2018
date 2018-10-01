@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 
 import kotlin.math.sqrt
 
@@ -12,13 +13,15 @@ import kotlin.math.sqrt
  * Найти все корни уравнения x^2 = y
  */
 fun sqRoots(y: Double) =
-        when {
+        when
+        {
             y < 0 -> listOf()
             y == 0.0 -> listOf(0.0)
-            else -> {
+            else ->
+            {
                 val root = sqrt(y)
                 // Результат!
-                listOf(-root, root)
+                listOf(- root, root)
             }
         }
 
@@ -28,16 +31,18 @@ fun sqRoots(y: Double) =
  * Найти все корни биквадратного уравнения ax^4 + bx^2 + c = 0.
  * Вернуть список корней (пустой, если корней нет)
  */
-fun biRoots(a: Double, b: Double, c: Double): List<Double> {
-    if (a == 0.0) {
+fun biRoots(a: Double, b: Double, c: Double): List<Double>
+{
+    if (a == 0.0)
+    {
         return if (b == 0.0) listOf()
-        else sqRoots(-c / b)
+        else sqRoots(- c / b)
     }
     val d = discriminant(a, b, c)
     if (d < 0.0) return listOf()
-    if (d == 0.0) return sqRoots(-b / (2 * a))
-    val y1 = (-b + sqrt(d)) / (2 * a)
-    val y2 = (-b - sqrt(d)) / (2 * a)
+    if (d == 0.0) return sqRoots(- b / (2 * a))
+    val y1 = (- b + sqrt(d)) / (2 * a)
+    val y2 = (- b - sqrt(d)) / (2 * a)
     return sqRoots(y1) + sqRoots(y2)
 }
 
@@ -46,10 +51,13 @@ fun biRoots(a: Double, b: Double, c: Double): List<Double> {
  *
  * Выделить в список отрицательные элементы из заданного списка
  */
-fun negativeList(list: List<Int>): List<Int> {
+fun negativeList(list: List<Int>): List<Int>
+{
     val result = mutableListOf<Int>()
-    for (element in list) {
-        if (element < 0) {
+    for (element in list)
+    {
+        if (element < 0)
+        {
             result.add(element)
         }
     }
@@ -61,11 +69,14 @@ fun negativeList(list: List<Int>): List<Int> {
  *
  * Изменить знак для всех положительных элементов списка
  */
-fun invertPositives(list: MutableList<Int>) {
-    for (i in 0 until list.size) {
+fun invertPositives(list: MutableList<Int>)
+{
+    for (i in 0 until list.size)
+    {
         val element = list[i]
-        if (element > 0) {
-            list[i] = -element
+        if (element > 0)
+        {
+            list[i] = - element
         }
     }
 }
@@ -93,9 +104,11 @@ fun squares(vararg array: Int) = squares(array.toList()).toTypedArray()
  * Пробелы не следует принимать во внимание при сравнении символов, например, строка
  * "А роза упала на лапу Азора" является палиндромом.
  */
-fun isPalindrome(str: String): Boolean {
+fun isPalindrome(str: String): Boolean
+{
     val lowerCase = str.toLowerCase().filter { it != ' ' }
-    for (i in 0..lowerCase.length / 2) {
+    for (i in 0..lowerCase.length / 2)
+    {
         if (lowerCase[i] != lowerCase[lowerCase.length - i - 1]) return false
     }
     return true
@@ -116,14 +129,14 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.average()
 
 /**
  * Средняя
@@ -133,7 +146,14 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double>
+{
+    val average = list.average()
+
+    for (i in 0 until list.size)
+        list[i] -= average
+    return list
+}
 
 /**
  * Средняя
@@ -142,7 +162,15 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double = TODO()
+fun times(a: List<Double>, b: List<Double>): Double
+{
+    var sum = 0.0
+
+    for (i in 0 until a.size)
+        sum += a[i] * b[i]
+
+    return sum
+}
 
 /**
  * Средняя
@@ -241,3 +269,17 @@ fun roman(n: Int): String = TODO()
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String = TODO()
+//{
+//    val units = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+//    val dozens = listOf("uniqueDozens", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+//    val hundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+//    val uniqueDozens = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать","восемнадцать", "девятнадцать")
+//    val thousandsUnit = "тысяч"
+//
+//    var divider = 10
+//
+//    while (n != 0)
+//    {
+//
+//    }
+//}

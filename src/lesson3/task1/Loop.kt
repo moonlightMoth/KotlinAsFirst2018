@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
+import java.lang.Math.pow
 import kotlin.math.*
 
 
@@ -100,16 +101,17 @@ fun digitNumber(n: Int): Int
 fun fib(n: Int): Int
 {
     if (n == 1 || n == 2) return 1
-    val lastTheeFibs = arrayOf(1, 1, 1)
 
-    for (i in 2 until n)
-    {
-        lastTheeFibs[0] = lastTheeFibs[1]
-        lastTheeFibs[1] = lastTheeFibs[2]
-        lastTheeFibs[2] = lastTheeFibs[0] + lastTheeFibs[1]
+    var a = 1
+    var b = 1
+
+    for (i in 3..n) {
+        val c = a + b
+        a = b
+        b = c
     }
 
-    return lastTheeFibs[2]
+    return b
 }
 
 
@@ -140,12 +142,7 @@ fun minDivisor(n: Int): Int
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int
-{
-    for (i in (n - 1) downTo 1)
-        if (n % i == 0) return i
-    return n
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -154,15 +151,7 @@ fun maxDivisor(n: Int): Int
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean
-{
-    for (i in 2..n)
-    {
-        if (n % i == 0 && m % i == 0)
-            return false
-    }
-    return true
-}
+fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
 
 /**
  * Простая
@@ -196,8 +185,8 @@ fun squareBetweenExists(m: Int, n: Int): Boolean =
 fun collatzSteps(x: Int): Int
 {
     var x1 = x
-
     var i = 0
+
     while (x1 != 1)
     {
         if (x1 % 2 == 0) x1 /= 2 else x1 = 3 * x1 + 1
@@ -230,14 +219,7 @@ fun sin(x: Double, eps: Double): Double
     return answer
 }
 
-fun findLesserEqualAngle(angle: Double): Double
-{
-    var equalAngle = angle
-    while (equalAngle > 2 * PI)
-        equalAngle -= 2 * PI
-    return equalAngle
-}
-
+fun findLesserEqualAngle(angle: Double): Double = angle % (2 * PI)
 
 /**
  * Средняя
