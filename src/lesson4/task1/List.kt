@@ -4,6 +4,11 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.power
+import lesson3.task1.sin
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.pow
 
 import kotlin.math.sqrt
 
@@ -149,9 +154,7 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.average
 fun center(list: MutableList<Double>): MutableList<Double>
 {
     val average = list.average()
-
-    for (i in 0 until list.size)
-        list[i] -= average
+    list.replaceAll { it - average }
     return list
 }
 
@@ -172,6 +175,7 @@ fun times(a: List<Double>, b: List<Double>): Double
     return sum
 }
 
+
 /**
  * Средняя
  *
@@ -180,7 +184,20 @@ fun times(a: List<Double>, b: List<Double>): Double
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double = TODO()
+fun polynom(p: List<Double>, x: Double): Double
+{
+    if (p.isEmpty())
+        return 0.0
+    else
+    {
+        var sum: Double = 0.0
+
+        for (i in 0 until p.size)
+            sum += p[i] * x.pow(i)
+
+        return sum
+    }
+}
 
 /**
  * Средняя
@@ -192,7 +209,18 @@ fun polynom(p: List<Double>, x: Double): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
+fun accumulate(list: MutableList<Double>): MutableList<Double>
+{
+    var sum: Double = 0.0
+
+    for (i in 0 until list.size)
+    {
+        list[i] += sum
+        if (i != 0)
+            sum +=list[i]
+    }
+    return list
+}
 
 /**
  * Средняя
