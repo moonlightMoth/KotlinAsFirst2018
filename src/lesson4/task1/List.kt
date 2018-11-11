@@ -186,16 +186,16 @@ fun times(a: List<Double>, b: List<Double>): Double
  */
 fun polynom(p: List<Double>, x: Double): Double
 {
-    if (p.isEmpty())
-        return 0.0
+    return if (p.isEmpty())
+        0.0
     else
     {
-        var sum: Double = 0.0
+        var sum = 0.0
 
         for (i in 0 until p.size)
             sum += p[i] * x.pow(i)
 
-        return sum
+        sum
     }
 }
 
@@ -211,11 +211,11 @@ fun polynom(p: List<Double>, x: Double): Double
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double>
 {
-    var sum: Double = 0.0
+    var sum = 0.0
 
     for (i in 0 until list.size)
     {
-        sum +=list[i]
+        sum += list[i]
         list[i] += sum - list[i]
     }
     return list
@@ -230,7 +230,7 @@ fun accumulate(list: MutableList<Double>): MutableList<Double>
  */
 fun factorize(n: Int): List<Int>
 {
-    val answer= mutableListOf<Int>()
+    val answer = mutableListOf<Int>()
     var remainingNum = n
     var divider = 2
 
