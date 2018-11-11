@@ -215,9 +215,8 @@ fun accumulate(list: MutableList<Double>): MutableList<Double>
 
     for (i in 0 until list.size)
     {
-        list[i] += sum
-        if (i != 0)
-            sum +=list[i]
+        sum +=list[i]
+        list[i] += sum - list[i]
     }
     return list
 }
@@ -229,7 +228,25 @@ fun accumulate(list: MutableList<Double>): MutableList<Double>
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int>
+{
+    val answer= mutableListOf<Int>()
+    var remainingNum = n
+    var divider = 2
+
+    while (remainingNum != 1)
+    {
+        if (remainingNum % divider != 0)
+            divider++
+        else
+        {
+            answer.add(divider)
+            remainingNum /= divider
+        }
+    }
+    return answer.toList()
+}
+
 
 /**
  * Сложная
