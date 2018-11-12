@@ -148,14 +148,9 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double {
-    var sum = 0.0
+fun times(a: List<Double>, b: List<Double>): Double =
+        a.mapIndexed { i, d -> a[i] * b[i] }.sum()
 
-    for (i in 0 until a.size)
-        sum += a[i] * b[i]
-
-    return sum
-}
 
 
 /**
@@ -167,16 +162,12 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Значение пустого многочлена равно 0.0 при любом x.
  */
 fun polynom(p: List<Double>, x: Double): Double {
-    return if (p.isEmpty())
-        0.0
-    else {
-        var sum = 0.0
 
-        for (i in 0 until p.size)
-            sum += p[i] * x.pow(i)
+    var sum = 0.0
 
-        sum
-    }
+    p.forEachIndexed { index, d -> sum += p[index] * x.pow(index)}
+
+    return sum
 }
 
 /**
@@ -190,11 +181,9 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
-    var sum = 0.0
 
-    for (i in 0 until list.size) {
-        sum += list[i]
-        list[i] += sum - list[i]
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -219,7 +208,7 @@ fun factorize(n: Int): List<Int> {
             remainingNum /= divider
         }
     }
-    return answer.toList()
+    return answer
 }
 
 
@@ -230,11 +219,8 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var answer = ""
-    factorize(n).forEach { answer += "*$it" }
-    return answer.substring(1, answer.length)
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
+
 
 /**
  * Средняя
@@ -254,7 +240,7 @@ fun convert(n: Int, base: Int): List<Int> {
 
     answer.reverse()
 
-    return answer.toList()
+    return answer
 }
 
 /**
@@ -278,7 +264,10 @@ fun convertToString(n: Int, base: Int): String {
     return answer
 }
 
-fun representationInLetter(number: Int): String = (number + 87).toChar().toString()
+const val letterToNumGap = 87
+const val charIntToIntGap = 48
+
+fun representationInLetter(number: Int): String = (number + letterToNumGap).toChar().toString()
 
 /**
  * Средняя
@@ -290,12 +279,15 @@ fun representationInLetter(number: Int): String = (number + 87).toChar().toStrin
 fun decimal(digits: List<Int>, base: Int): Int {
     var answer = 0
 
-    for (i in 0 until digits.size)
-        answer += digits[i] * power(base, digits.size - 1 - i)
-
+    var i = digits.size - 1
+    digits.map {
+        answer += it * power(base, i)
+        i--
+    }
 
     return answer
 }
+
 
 /**
  * Сложная
@@ -306,20 +298,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int {
-    var answer = 0
-
-    for (i in 0 until str.length)
-        answer += getDecimal(str[i]) * power(base, str.length - 1 - i)
-
-    return answer
-}
+fun decimalFromString(str: String, base: Int): Int = decimal(str.toList().map { getDecimal(it) }, base)
 
 fun getDecimal(ch: Char): Int =
-        if (ch.toInt() in 48..57)
-            ch.toInt() - 48
+        if (ch.toInt() in charIntToIntGap..charIntToIntGap+9)
+            ch.toInt() - charIntToIntGap
         else
-            ch.toInt() - 87
+            ch.toInt() - letterToNumGap
 
 /**
  * Сложная
@@ -337,12 +322,12 @@ fun roman(n: Int): String
     val units = listOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X")
 
     val lists = listOf(listOf(), units, dozens, hundreds, thousands)
-    var answer = ""
+    val sb = StringBuilder()
 
     for (i in n.toString().length downTo 1)
-        answer += lists[i][n % power(10, i) / power(10, i - 1)]
+        sb.append(lists[i][n % power(10, i) / power(10, i - 1)])
 
-    return answer
+    return sb.toString()
 }
 
 /**
