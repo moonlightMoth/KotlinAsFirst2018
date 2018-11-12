@@ -293,6 +293,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
     for (i in 0 until digits.size)
         answer += digits[i] * power(base, digits.size - 1 - i)
 
+
     return answer
 }
 
@@ -305,7 +306,20 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var answer = 0
+
+    for (i in 0 until str.length)
+        answer += getDecimal(str[i]) * power(base, str.length - 1 - i)
+
+    return answer
+}
+
+fun getDecimal(ch: Char): Int =
+        if (ch.toInt() in 48..57)
+            ch.toInt() - 48
+        else
+            ch.toInt() - 87
 
 /**
  * Сложная
@@ -315,7 +329,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String
+{
+    val thousands = listOf("", "M", "MM", "MMM")
+    val hundreds = listOf("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
+    val dozens = listOf("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
+    val units = listOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X")
+
+    val lists = listOf(listOf(), units, dozens, hundreds, thousands)
+    var answer = ""
+
+    for (i in n.toString().length downTo 1)
+        answer += lists[i][n % power(10, i) / power(10, i - 1)]
+
+    return answer
+}
 
 /**
  * Очень сложная
@@ -324,18 +352,56 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
-//{
-//    val units = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-//    val dozens = listOf("uniqueDozens", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-//    val hundreds = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
-//    val uniqueDozens = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать","восемнадцать", "девятнадцать")
-//    val thousandsUnit = "тысяч"
-//
-//    var divider = 10
-//
-//    while (n != 0)
-//    {
-//
-//    }
-//}
+fun russian(n: Int): String
+{
+
+    var answer = formTripletName(n / 1000)
+    answer = answer.trim()
+
+    if (answer != "")
+    {
+        if (answer.substring(answer.length - 3, answer.length) == "дин")
+            answer = answer.substring(0, answer.length - 2) + "на"
+        if (answer.substring(answer.length - 3, answer.length) == "два")
+            answer = answer.substring(0, answer.length - 1) + "е"
+
+        answer += when (answer.substring(answer.length - 3, answer.length))
+        {
+            "дна" -> " тысяча "
+            "две" -> " тысячи "
+            "три" -> " тысячи "
+            "ыре" -> " тысяча "
+            else -> " тысяч "
+        }
+    }
+
+    return (answer + formTripletName(n % 1000)).trim()
+}
+
+fun formTripletName(n: Int): String
+{
+    val units = listOf("", "один ", "два ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
+    val dozens = listOf("", "uniqueDozens", "двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
+    val hundreds = listOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
+    val uniqueDozens = listOf("десять ", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
+
+    val answer = hundreds[n / 100]
+
+    return if (n / 10 % 10 == 1)
+        "$answer${uniqueDozens[n % 10]}"
+    else
+        "$answer${dozens[n / 10 % 10]}${units[n % 10]}"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
