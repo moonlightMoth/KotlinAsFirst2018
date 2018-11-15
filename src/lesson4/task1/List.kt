@@ -247,23 +247,9 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String {
-    var answer = ""
-
-    convert(n, base).forEach {
-        if (it in 0..9)
-            answer += it
-        else
-            answer += representationInLetter(it)
-    }
-
-    return if (answer.isEmpty()) "0" else answer
-}
-
-const val letterToNumGap = 87
-const val charIntToIntGap = 48
-
-fun representationInLetter(number: Int): String = (number + letterToNumGap).toChar().toString()
+fun convertToString(n: Int, base: Int): String =
+        convert(n, base).joinToString(separator = "")
+        { if (it in 0..9) it.toString() else ('a' - 10 + it).toString() }
 
 /**
  * Средняя
@@ -272,17 +258,10 @@ fun representationInLetter(number: Int): String = (number + letterToNumGap).toCh
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int {
-    var answer = 0
 
-    var i = digits.size - 1
-    digits.map {
-        answer += it * power(base, i)
-        i--
-    }
 
-    return answer
-}
+fun decimal(digits: List<Int>, base: Int): Int =
+        digits.mapIndexed { index, _ -> digits[index] * power(base, digits.size - 1 - index) }.sum()
 
 
 /**
@@ -294,13 +273,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = decimal(str.toList().map { getDecimal(it) }, base)
+fun decimalFromString(str: String, base: Int): Int = decimal(str.map { getDecimal(it) }, base)
 
-fun getDecimal(ch: Char): Int =
-        if (ch.toInt() in charIntToIntGap..charIntToIntGap+9)
-            ch.toInt() - charIntToIntGap
-        else
-            ch.toInt() - letterToNumGap
+fun getDecimal(ch: Char): Int = when (ch)
+{
+    in '0'..'9' -> ch - '0'
+    else -> ch - 'a' + 10
+}
 
 /**
  * Сложная
