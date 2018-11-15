@@ -235,6 +235,7 @@ fun convert(n: Int, base: Int): List<Int> {
 
     answer.reverse()
 
+    if (answer.isEmpty()) answer.add(0)
     return answer
 }
 
@@ -256,7 +257,7 @@ fun convertToString(n: Int, base: Int): String {
             answer += representationInLetter(it)
     }
 
-    return answer
+    return if (answer.isEmpty()) "0" else answer
 }
 
 const val letterToNumGap = 87
@@ -350,7 +351,7 @@ fun russian(n: Int): String
             "дна" -> " тысяча "
             "две" -> " тысячи "
             "три" -> " тысячи "
-            "ыре" -> " тысяча "
+            "ыре" -> " тысячи "
             else -> " тысяч "
         }
     }
