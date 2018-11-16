@@ -248,8 +248,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String =
-        convert(n, base).joinToString(separator = "")
-        { if (it in 0..9) it.toString() else ('a' - 10 + it).toString() }
+        convert(n, base).joinToString(separator = "") { if (it in 0..9) it.toString() else ('a' - 10 + it).toString() }
 
 /**
  * Средняя
@@ -275,11 +274,12 @@ fun decimal(digits: List<Int>, base: Int): Int =
  */
 fun decimalFromString(str: String, base: Int): Int = decimal(str.map { getDecimal(it) }, base)
 
-fun getDecimal(ch: Char): Int = when (ch)
-{
-    in '0'..'9' -> ch - '0'
-    else -> ch - 'a' + 10
-}
+fun getDecimal(ch: Char): Int =
+        when (ch)
+        {
+            in '0'..'9' -> ch - '0'
+            else -> ch - 'a' + 10
+        }
 
 /**
  * Сложная
@@ -340,10 +340,14 @@ fun russian(n: Int): String
 
 fun formTripletName(n: Int): String
 {
-    val units = listOf("", "один ", "два ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
-    val dozens = listOf("", "uniqueDozens", "двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
-    val hundreds = listOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
-    val uniqueDozens = listOf("десять ", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
+    val units = listOf("", "один ", "два ", "три ", "четыре ", "пять ",
+            "шесть ", "семь ", "восемь ", "девять ")
+    val dozens = listOf("", "uniqueDozens", "двадцать ", "тридцать ", "сорок ", "пятьдесят ",
+            "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
+    val hundreds = listOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ",
+            "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
+    val uniqueDozens = listOf("десять ", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ",
+            "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
 
     val answer = hundreds[n / 100]
 
