@@ -231,7 +231,29 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>>
+{
+    var answer = mapOf<String, Set<String>>()
+
+    friends.forEach { s, _ -> answer += mapOf(s to bsf(mutableSetOf(), s, friends, mutableSetOf())) }
+
+    answer.forEach { s, set -> set.forEach { if (!friends.containsKey(it)) answer += mapOf(it to setOf()) } }
+
+    return answer
+}
+
+fun bsf(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<String>>,
+        iterationAnswer: MutableSet<String>): Set<String>
+{
+    if (friends.containsKey(name) && !friends[name]!!.isEmpty() && !usedNames.contains(name))
+    {
+        usedNames.add(name)
+        friends[name]!!.forEach { s -> if (!usedNames.contains(s)) iterationAnswer.add(s)
+            bsf(usedNames, s, friends, iterationAnswer)}
+    }
+
+    return iterationAnswer
+}
 
 /**
  * Простая
