@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -11,12 +13,15 @@ package lesson5.task1
  */
 fun shoppingListCost(
         shoppingList: List<String>,
-        costs: Map<String, Double>): Double {
+        costs: Map<String, Double>): Double
+{
     var totalCost = 0.0
 
-    for (item in shoppingList) {
+    for (item in shoppingList)
+    {
         val itemCost = costs[item]
-        if (itemCost != null) {
+        if (itemCost != null)
+        {
             totalCost += itemCost
         }
     }
@@ -32,16 +37,20 @@ fun shoppingListCost(
  */
 fun filterByCountryCode(
         phoneBook: MutableMap<String, String>,
-        countryCode: String) {
+        countryCode: String)
+{
     val namesToRemove = mutableListOf<String>()
 
-    for ((name, phone) in phoneBook) {
-        if (!phone.startsWith(countryCode)) {
+    for ((name, phone) in phoneBook)
+    {
+        if (!phone.startsWith(countryCode))
+        {
             namesToRemove.add(name)
         }
     }
 
-    for (name in namesToRemove) {
+    for (name in namesToRemove)
+    {
         phoneBook.remove(name)
     }
 }
@@ -54,12 +63,15 @@ fun filterByCountryCode(
  */
 fun removeFillerWords(
         text: List<String>,
-        vararg fillerWords: String): List<String> {
+        vararg fillerWords: String): List<String>
+{
     val fillerWordSet = setOf(*fillerWords)
 
     val res = mutableListOf<String>()
-    for (word in text) {
-        if (word !in fillerWordSet) {
+    for (word in text)
+    {
+        if (word !in fillerWordSet)
+        {
             res += word
         }
     }
@@ -71,7 +83,8 @@ fun removeFillerWords(
  *
  * Для заданного текста `text` построить множество встречающихся в нем слов
  */
-fun buildWordSet(text: List<String>): MutableSet<String> {
+fun buildWordSet(text: List<String>): MutableSet<String>
+{
     val res = mutableSetOf<String>()
     for (word in text) res.add(word)
     return res
@@ -176,7 +189,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         }
     }
 
-    counts.forEach{answer[it.key] = answer[it.key]!! / it.value}
+    counts.forEach { answer[it.key] = answer[it.key]!! / it.value }
 
     return answer
 }
@@ -248,8 +261,10 @@ fun dfs(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<St
     if (friends.containsKey(name) && !friends[name]!!.isEmpty() && !usedNames.contains(name))
     {
         usedNames.add(name)
-        friends[name]!!.forEach { s -> if (!usedNames.contains(s)) iterationAnswer.add(s)
-            dfs(usedNames, s, friends, iterationAnswer)}
+        friends[name]!!.forEach { s ->
+            if (!usedNames.contains(s)) iterationAnswer.add(s)
+            dfs(usedNames, s, friends, iterationAnswer)
+        }
     }
 
     return iterationAnswer
@@ -270,7 +285,7 @@ fun dfs(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<St
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) =
-    b.forEach {k, v -> if (a.containsKey(k) && a[k] == b[k]) a.remove(k)}
+        b.forEach { k, _ -> if (a.containsKey(k) && a[k] == b[k]) a.remove(k) }
 
 /**
  * Простая
@@ -320,7 +335,14 @@ fun extractRepeats(list: List<String>): Map<String, Int>
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean
+{
+    words.forEachIndexed { i, s ->
+        for (j in i + 1 until words.size)
+            if (s.toList().containsAll(words[j].toList())) return true
+    }
+    return false
+}
 
 /**
  * Сложная
@@ -339,7 +361,14 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int>
+{
+    list.forEach { num ->
+        if (list.contains(number - num) && list.indexOf(num) != list.indexOf(number - num))
+            return Pair(list.indexOf(num), list.indexOf(number - num))
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
@@ -360,4 +389,61 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+var values: Array<Array<Int>> = arrayOf()
+val answer = mutableSetOf<String>()
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String>
+{
+    values = Array(capacity + 1) { Array(treasures.size + 1) { 0 } }
+    val indexedTreasures = treasures.filter { it.value.first <= capacity }.toList()
+
+    fillValuesArray(indexedTreasures, capacity)
+    answer.clear()
+    buildAnswerSet(indexedTreasures, capacity, indexedTreasures.size)
+
+    return answer
+
+}
+
+fun fillValuesArray(indexedTreasures: List<Pair<String, Pair<Int, Int>>>, capacity: Int)
+{
+    for (i in 1..indexedTreasures.size)
+        for (j in 1..capacity)
+            values[j][i] =
+                    if (j < indexedTreasures[i - 1].second.first)
+                        values[j][i - 1]
+                    else
+                    {
+                        max(values[j][i - 1],
+                                values[j - indexedTreasures[i - 1].second.first][i - 1] +
+                                        indexedTreasures[i - 1].second.second)
+                    }
+
+}
+
+fun buildAnswerSet(indexedTreasures: List<Pair<String, Pair<Int, Int>>>, intermediateCapacity: Int, index: Int)
+{
+    if (values[intermediateCapacity][index] == 0)
+        return
+    if (values[intermediateCapacity][index - 1] == values[intermediateCapacity][index])
+        buildAnswerSet(indexedTreasures, intermediateCapacity, index - 1)
+    else
+    {
+        answer.add(indexedTreasures[index - 1].first)
+        buildAnswerSet(indexedTreasures,
+                intermediateCapacity - indexedTreasures[index - 1].second.first,
+                index - 1)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
