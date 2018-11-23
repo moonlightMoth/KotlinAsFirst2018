@@ -235,21 +235,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 {
     var answer = mapOf<String, Set<String>>()
 
-    friends.forEach { s, _ -> answer += mapOf(s to bsf(mutableSetOf(), s, friends, mutableSetOf())) }
+    friends.forEach { s, _ -> answer += mapOf(s to dfs(mutableSetOf(), s, friends, mutableSetOf())) }
 
     answer.forEach { s, set -> set.forEach { if (!friends.containsKey(it)) answer += mapOf(it to setOf()) } }
 
     return answer
 }
 
-fun bsf(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<String>>,
+fun dfs(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<String>>,
         iterationAnswer: MutableSet<String>): Set<String>
 {
     if (friends.containsKey(name) && !friends[name]!!.isEmpty() && !usedNames.contains(name))
     {
         usedNames.add(name)
         friends[name]!!.forEach { s -> if (!usedNames.contains(s)) iterationAnswer.add(s)
-            bsf(usedNames, s, friends, iterationAnswer)}
+            dfs(usedNames, s, friends, iterationAnswer)}
     }
 
     return iterationAnswer
@@ -269,14 +269,15 @@ fun bsf(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<St
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) =
+    b.forEach {k, v -> if (a.containsKey(k) && a[k] == b[k]) a.remove(k)}
 
 /**
  * Простая
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { b.contains(it) }
 
 /**
  * Средняя
@@ -287,7 +288,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.containsAll(word.toList())
 
 /**
  * Средняя
@@ -301,7 +302,14 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int>
+{
+    val lettersCount = mutableMapOf<String, Int>()
+
+    list.forEach { if (!lettersCount.containsKey(it)) lettersCount[it] = 1 else lettersCount[it] = lettersCount[it]!!.plus(1) }
+
+    return lettersCount.filter { it.value > 1 }
+}
 
 /**
  * Средняя
