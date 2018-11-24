@@ -8,10 +8,12 @@ package lesson6.task1
  * Время представлено строкой вида "11:34:45", содержащей часы, минуты и секунды, разделённые двоеточием.
  * Разобрать эту строку и рассчитать количество секунд, прошедшее с начала дня.
  */
-fun timeStrToSeconds(str: String): Int {
+fun timeStrToSeconds(str: String): Int
+{
     val parts = str.split(":")
     var result = 0
-    for (part in parts) {
+    for (part in parts)
+    {
         val number = part.toInt()
         result = result * 60 + number
     }
@@ -32,7 +34,8 @@ fun twoDigitStr(n: Int) = if (n in 0..9) "0$n" else "$n"
  * Дано seconds -- время в секундах, прошедшее с начала дня.
  * Вернуть текущее время в виде строки в формате "ЧЧ:ММ:СС".
  */
-fun timeSecondsToStr(seconds: Int): String {
+fun timeSecondsToStr(seconds: Int): String
+{
     val hour = seconds / 3600
     val minute = (seconds % 3600) / 60
     val second = seconds % 60
@@ -42,19 +45,24 @@ fun timeSecondsToStr(seconds: Int): String {
 /**
  * Пример: консольный ввод
  */
-fun main(args: Array<String>) {
+fun main(args: Array<String>)
+{
     println("Введите время в формате ЧЧ:ММ:СС")
     val line = readLine()
-    if (line != null) {
+    if (line != null)
+    {
         val seconds = timeStrToSeconds(line)
-        if (seconds == -1) {
+        if (seconds == - 1)
+        {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
         }
-        else {
+        else
+        {
             println("Прошло секунд с начала суток: $seconds")
         }
     }
-    else {
+    else
+    {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }

@@ -43,7 +43,7 @@ fun filterByCountryCode(
 
     for ((name, phone) in phoneBook)
     {
-        if (!phone.startsWith(countryCode))
+        if (! phone.startsWith(countryCode))
         {
             namesToRemove.add(name)
         }
@@ -134,10 +134,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
 
     for ((key, value) in grades)
     {
-        if (!answer.containsKey(value))
+        if (! answer.containsKey(value))
             answer.set(value, listOf(key))
         else
-            answer[value] = answer[value]!!.plus(listOf(key))
+            answer[value] = answer[value] !!.plus(listOf(key))
     }
 
     return answer
@@ -156,7 +156,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean
 {
     for ((key, _) in a)
-        if (!(b.containsKey(key) && a[key] == b[key]))
+        if (! (b.containsKey(key) && a[key] == b[key]))
             return false
     return true
 }
@@ -177,19 +177,19 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val counts = mutableMapOf<String, Int>()
 
     stockPrices.forEach {
-        if (!answer.containsKey(it.first))
+        if (! answer.containsKey(it.first))
         {
             answer[it.first] = it.second
             counts[it.first] = 1
         }
         else
         {
-            answer[it.first] = answer[it.first]!!.plus(it.second)
-            counts[it.first] = counts[it.first]!!.plus(1)
+            answer[it.first] = answer[it.first] !!.plus(it.second)
+            counts[it.first] = counts[it.first] !!.plus(1)
         }
     }
 
-    counts.forEach { answer[it.key] = answer[it.key]!! / it.value }
+    counts.forEach { answer[it.key] = answer[it.key] !! / it.value }
 
     return answer
 }
@@ -250,7 +250,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 
     friends.forEach { s, _ -> answer += mapOf(s to dfs(mutableSetOf(), s, friends, mutableSetOf())) }
 
-    answer.forEach { s, set -> set.forEach { if (!friends.containsKey(it)) answer += mapOf(it to setOf()) } }
+    answer.forEach { s, set -> set.forEach { if (! friends.containsKey(it)) answer += mapOf(it to setOf()) } }
 
     return answer
 }
@@ -258,11 +258,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun dfs(usedNames: MutableSet<String>, name: String, friends: Map<String, Set<String>>,
         iterationAnswer: MutableSet<String>): Set<String>
 {
-    if (friends.containsKey(name) && !friends[name]!!.isEmpty() && !usedNames.contains(name))
+    if (friends.containsKey(name) && ! friends[name] !!.isEmpty() && ! usedNames.contains(name))
     {
         usedNames.add(name)
-        friends[name]!!.forEach { s ->
-            if (!usedNames.contains(s)) iterationAnswer.add(s)
+        friends[name] !!.forEach { s ->
+            if (! usedNames.contains(s)) iterationAnswer.add(s)
             dfs(usedNames, s, friends, iterationAnswer)
         }
     }
@@ -322,7 +322,7 @@ fun extractRepeats(list: List<String>): Map<String, Int>
 {
     val lettersCount = mutableMapOf<String, Int>()
 
-    list.forEach { if (!lettersCount.containsKey(it)) lettersCount[it] = 1 else lettersCount[it] = lettersCount[it]!!.plus(1) }
+    list.forEach { if (! lettersCount.containsKey(it)) lettersCount[it] = 1 else lettersCount[it] = lettersCount[it] !!.plus(1) }
 
     return lettersCount.filter { it.value > 1 }
 }
@@ -340,7 +340,7 @@ fun hasAnagrams(words: List<String>): Boolean
 {
     words.forEachIndexed { i, s ->
         for (j in i + 1 until words.size)
-            if (s.toList().sorted() == words[j].toList().sorted() && s != "" && words[j] != "") return true
+            if (s.toList().sorted() == words[j].toList().sorted()) return true
     }
     return false
 }
@@ -368,7 +368,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int>
         if (list.subList(i + 1, list.lastIndex + 1).contains(number - it))
             return Pair(i, list.subList(i + 1, list.lastIndex + 1).indexOf(number - it) + i + 1)
     }
-    return Pair(-1, -1)
+    return Pair(- 1, - 1)
 }
 
 /**
