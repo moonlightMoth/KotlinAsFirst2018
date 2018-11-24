@@ -340,8 +340,7 @@ fun hasAnagrams(words: List<String>): Boolean
 {
     words.forEachIndexed { i, s ->
         for (j in i + 1 until words.size)
-            if ((s.toList().containsAll(words[j].toList()) || words[j].toList().containsAll(s.toList()))
-                    && s != "" && words[j] != "") return true
+            if (s.toList().sorted() == words[j].toList().sorted() && s != "" && words[j] != "") return true
     }
     return false
 }
