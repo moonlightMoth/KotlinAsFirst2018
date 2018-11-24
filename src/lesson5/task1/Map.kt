@@ -214,7 +214,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var answerPair = Pair<String?, Double>(null, Double.MAX_VALUE)
 
     for ((key, value) in stuff)
-        if (value.first == kind && value.second < answerPair.second)
+        if (value.first == kind && value.second <= answerPair.second)
             answerPair = Pair(key, value.second)
 
     return answerPair.first
@@ -292,7 +292,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) =
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { b.contains(it) }
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя
@@ -363,9 +363,9 @@ fun hasAnagrams(words: List<String>): Boolean
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int>
 {
-    list.forEach { num ->
-        if (list.contains(number - num) && list.indexOf(num) != list.indexOf(number - num))
-            return Pair(list.indexOf(num), list.indexOf(number - num))
+    list.forEachIndexed { i, it ->
+        if (list.subList(i + 1, list.lastIndex + 1).contains(number - it))
+            return Pair(i, list.subList(i + 1, list.lastIndex + 1).indexOf(number - it) + i + 1)
     }
     return Pair(-1, -1)
 }
