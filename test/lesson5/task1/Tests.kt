@@ -291,6 +291,8 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('y', 'F', 'ￓ', 'i', '}', '1', 'Q', 'e', '&', 'Z', 'V', '<', 'B', 'r', '仇'),
+                "zE"))
     }
 
     @Test
@@ -317,6 +319,20 @@ class Tests {
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "")))
+        assertTrue(hasAnagrams(listOf(
+                "{FHuu=3",
+                "",
+                ".",
+                "c",
+                "",
+                "M]ec._;/Zy1dK}s",
+                "AM#G[L+eMqM>,[s &ta\ty3a=]C~+wE%;llrtpy&Q-[F!//^D[LGD",
+                "6",
+                "o",
+                "iuDF4]]",
+                "k>>=&Ce4 $`",
+                "$.",
+                "`OYjW)7NHbt")))
     }
 
     @Test
@@ -336,7 +352,7 @@ class Tests {
         )
         assertEquals(
                 Pair(0, 9),
-                findSumOfTwo(listOf(4, 0,3,5,6,7,8,0,5,4,1), 8)
+                findSumOfTwo(listOf(4, 0, 3, 5, 6, 7, 8, 0, 5, 4, 1), 8)
         )
     }
 

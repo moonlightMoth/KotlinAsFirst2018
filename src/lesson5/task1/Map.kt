@@ -303,7 +303,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.containsAll(word.toList())
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+        chars.map { it.toLowerCase() }.containsAll(word.toList().map { it.toLowerCase() })
 
 /**
  * Средняя
@@ -339,7 +340,8 @@ fun hasAnagrams(words: List<String>): Boolean
 {
     words.forEachIndexed { i, s ->
         for (j in i + 1 until words.size)
-            if (s.toList().containsAll(words[j].toList()) && s != "" && words[j] != "") return true
+            if ((s.toList().containsAll(words[j].toList()) || words[j].toList().containsAll(s.toList()))
+                    && s != "" && words[j] != "") return true
     }
     return false
 }
