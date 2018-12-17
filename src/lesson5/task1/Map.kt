@@ -133,12 +133,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
     val answer = mutableMapOf<Int, List<String>>()
 
     for ((key, value) in grades)
-    {
-        if (! answer.containsKey(value))
-            answer.set(value, listOf(key))
-        else
-            answer[value] = answer[value] !!.plus(listOf(key))
-    }
+        answer[value] = answer.getOrPut(value, { listOf() }).plus(listOf(key))
 
     return answer
 }
@@ -153,13 +148,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean
-{
-    for ((key, _) in a)
-        if (! (b.containsKey(key) && a[key] == b[key]))
-            return false
-    return true
-}
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean =
+        a.all { b.containsKey(it.key) && b[it.key] == it.value }
 
 /**
  * Средняя
@@ -177,16 +167,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val counts = mutableMapOf<String, Int>()
 
     stockPrices.forEach {
-        if (! answer.containsKey(it.first))
-        {
-            answer[it.first] = it.second
-            counts[it.first] = 1
-        }
-        else
-        {
-            answer[it.first] = answer[it.first] !!.plus(it.second)
-            counts[it.first] = counts[it.first] !!.plus(1)
-        }
+        answer[it.first] = answer.getOrPut(it.first, { 0.0 }).plus(it.second)
+        counts[it.first] = counts.getOrPut(it.first, { 0 }).plus(1)
     }
 
     counts.forEach { answer[it.key] = answer[it.key] !! / it.value }
@@ -209,16 +191,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String?
-{
-    var answerPair = Pair<String?, Double>(null, Double.MAX_VALUE)
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
+        stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key
 
-    for ((key, value) in stuff)
-        if (value.first == kind && value.second <= answerPair.second)
-            answerPair = Pair(key, value.second)
-
-    return answerPair.first
-}
 
 /**
  * Сложная
@@ -250,7 +225,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 
     friends.forEach { s, _ -> answer += mapOf(s to dfs(mutableSetOf(), s, friends, mutableSetOf())) }
 
-    answer.forEach { s, set -> set.forEach { if (! friends.containsKey(it)) answer += mapOf(it to setOf()) } }
+    answer.forEach { _, set -> set.forEach { if (! friends.containsKey(it)) answer += mapOf(it to setOf()) } }
 
     return answer
 }
@@ -322,7 +297,7 @@ fun extractRepeats(list: List<String>): Map<String, Int>
 {
     val lettersCount = mutableMapOf<String, Int>()
 
-    list.forEach { if (! lettersCount.containsKey(it)) lettersCount[it] = 1 else lettersCount[it] = lettersCount[it] !!.plus(1) }
+    list.forEach { lettersCount[it] = lettersCount.getOrPut(it, { 0 }).plus(1) }
 
     return lettersCount.filter { it.value > 1 }
 }
