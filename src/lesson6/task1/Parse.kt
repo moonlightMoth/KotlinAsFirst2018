@@ -119,11 +119,11 @@ fun dateStrToDigit(str: String): String
     {
         list[1] = months[list[1]]!!
 
-        if (!checkDayCorrectness(list[0].toInt(), list[1].toInt()) || list.size != 3)
+        if (!checkDayCorrectness(list[0].toInt(), list[1].toInt(), list[2].toInt()) || list.size != 3)
             return ""
         list[2].toInt()
 
-        if (list[0].toInt() in 1..9)
+        if (list[0].length == 1)
             list[0] = "0${list[0]}"
     }
     catch (e: Exception)
@@ -136,7 +136,11 @@ fun dateStrToDigit(str: String): String
 }
 
 
-fun checkDayCorrectness(day: Int, month: Int) = day in monthsToDayRanges.getOrDefault(month, 40..41)
+fun checkDayCorrectness(day: Int, month: Int, year: Int) =
+        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
+            day in 1..29
+        else
+            day in monthsToDayRanges.getOrDefault(month, -999..-998)
 
 
 /**
@@ -155,7 +159,7 @@ fun dateDigitToStr(digital: String): String
 
     try
     {
-        if (!checkDayCorrectness(list[0].toInt(), list[1].toInt()) || list.size != 3)
+        if (!checkDayCorrectness(list[0].toInt(), list[1].toInt(), list[2].toInt()) || list.size != 3)
             return ""
         list[2].toInt()
 
@@ -222,7 +226,7 @@ fun bestLongJump(jumps: String): Int
         }
         catch (e: NumberFormatException)
         {
-            if (!(it == "%" || it == "-"))
+            if (!(it == "%" || it == "-" || it == ""))
                 return -1
             else
                 continue
