@@ -130,10 +130,10 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
 {
-    val answer = mutableMapOf<Int, List<String>>()
+    val answer = mutableMapOf<Int, MutableList<String>>()
 
     for ((key, value) in grades)
-        answer[value] = answer.getOrPut(value, { listOf() }).plus(listOf(key))
+        answer.getOrPut(value, { mutableListOf() }).add(key)
 
     return answer
 }
@@ -171,9 +171,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         counts[it.first] = counts.getOrPut(it.first, { 0 }).plus(1)
     }
 
-    counts.forEach { answer[it.key] = answer[it.key] !! / it.value }
-
-    return answer
+    return answer.mapValues { it.value / counts[it.key]!! }
 }
 
 /**
@@ -225,7 +223,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 
     friends.forEach { s, _ -> answer += mapOf(s to dfs(mutableSetOf(), s, friends, mutableSetOf())) }
 
-    answer.forEach { _, set -> set.forEach { if (! friends.containsKey(it)) answer += mapOf(it to setOf()) } }
+    answer.forEach { _, st -> st.forEach { if (! friends.containsKey(it)) answer += mapOf(it to setOf()) } }
 
     return answer
 }
