@@ -278,6 +278,11 @@ class Tests {
                 emptyList<String>(),
                 whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Sveta", "Kirill"))
         )
+        assertEquals(
+                listOf("Mikhail"),
+                whoAreInBoth(listOf("Marat", "Mikhail", "Mikhail", "Mikhail", "Mikhail"),
+                        listOf("Sveta", "Kirill", "Mikhail"))
+        )
     }
 
     @Test
@@ -286,6 +291,8 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('y', 'F', 'ￓ', 'i', '}', '1', 'Q', 'e', '&', 'Z', 'V', '<', 'B', 'r', '仇'),
+                "zE"))
     }
 
     @Test
@@ -307,10 +314,12 @@ class Tests {
 
     @Test
     @Tag("Normal")
-    fun hasAnagrams() {
+    fun hasAnagrams()
+    {
         assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
+        assertFalse(hasAnagrams(listOf("рот", "свет", "код", "")))
     }
 
     @Test
@@ -327,6 +336,10 @@ class Tests {
         assertEquals(
                 Pair(-1, -1),
                 findSumOfTwo(listOf(1, 2, 3), 6)
+        )
+        assertEquals(
+                Pair(0, 9),
+                findSumOfTwo(listOf(4, 0, 3, 5, 6, 7, 8, 0, 5, 4, 1), 8)
         )
     }
 
