@@ -309,15 +309,15 @@ fun transformLetter(ch: Char, dic: Map<Char, String>): String =
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String)
 {
-    var words = File(inputName).readLines().map { it.toLowerCase() }
+    var words = File(inputName).readLines().map { it }
     var maxLength = 0
 
-    words = words.filter { checkChaoticness(it) }
+    words = words.filter { checkChaoticness(it.toLowerCase()) }
     words.forEach { if (maxLength < it.length) maxLength = it.length }
 
     File(outputName).writeText(words
             .filter { it.length == maxLength && checkChaoticness(it) }
-            .map { it.capitalize() }.toString().dropLast(1).drop(1))
+            .map { it }.toString().dropLast(1).drop(1))
 
 
 }

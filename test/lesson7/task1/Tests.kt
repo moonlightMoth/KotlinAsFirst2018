@@ -83,7 +83,7 @@ Basic, Ruby, Swift.
  *
  * Исключения (жУри, броШУра, параШут) в рамках данного задания обрабатывать не нужно
  *
- * жИ шИ ЖИ Ши ЖА шА Жа ша жу шу жу щу ча шу щу ща жа жи жи жу чу ча Ж
+ * жИ шИ ЖИ Ши ЖА шА Жа ша жу шу жу щу ча шу щу ща жа жи жи жу чу ча
  */""")
         File("temp.txt").delete()
     }
@@ -199,7 +199,7 @@ Basic, Ruby, Swift.
         assertFileContent("temp.txt", "Карминовый, Некрасивый")
         File("temp.txt").delete()
         chooseLongestChaoticWord("input/chaotic_in2.txt", "temp.txt")
-        assertFileContent("temp.txt", "Фба")
+        assertFileContent("temp.txt", "ФMа")
         File("temp.txt").delete()
     }
 
