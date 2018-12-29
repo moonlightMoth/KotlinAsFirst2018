@@ -62,6 +62,8 @@ Basic, Ruby, Swift.
                 countSubstrings("input/substrings_in1.txt", listOf("РАЗНЫЕ", "ные", "Неряшливость", "е", "эволюция")))
         assertEquals(mapOf("Карминовый" to 2, "Некрасивый" to 2, "белоглазый" to 1),
                 countSubstrings("input/substrings_in1.txt", listOf("Карминовый", "Некрасивый", "белоглазый")))
+        assertEquals(mapOf("cac" to 2),
+                countSubstrings("input/substrings_in2.txt", listOf("cac")))
     }
 
     @Test
@@ -81,7 +83,7 @@ Basic, Ruby, Swift.
  *
  * Исключения (жУри, броШУра, параШут) в рамках данного задания обрабатывать не нужно
  *
- * жИ шИ ЖИ Ши ЖА шА Жа ша жу шу жу щу ча шу щу ща жа жи жи жу чу ча
+ * жИ шИ ЖИ Ши ЖА шА Жа ша жу шу жу щу ча шу щу ща жа жи жи жу чу ча Ж
  */""")
         File("temp.txt").delete()
     }
@@ -195,6 +197,9 @@ Basic, Ruby, Swift.
     fun chooseLongestChaoticWord() {
         chooseLongestChaoticWord("input/chaotic_in1.txt", "temp.txt")
         assertFileContent("temp.txt", "Карминовый, Некрасивый")
+        File("temp.txt").delete()
+        chooseLongestChaoticWord("input/chaotic_in2.txt", "temp.txt")
+        assertFileContent("temp.txt", "Фба")
         File("temp.txt").delete()
     }
 
@@ -341,6 +346,22 @@ Basic, Ruby, Swift.
               74070
              ------
               74070
+             """
+        )
+
+        test(38649,
+                29724,
+                """
+                   38649
+             *     29724
+             -----------
+                  154596
+             +    77298
+             +  270543
+             + 347841
+             + 77298
+             -----------
+              1148802876
              """
         )
 

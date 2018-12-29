@@ -44,7 +44,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String)
                 else
                 {
                     outputStream.write(" ")
-                    currentLineLength++
+                    currentLineLength ++
                 }
             }
             outputStream.write(word)
@@ -65,11 +65,11 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String)
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int>
 {
-    val fileText = File(inputName).readText().toLowerCase()
+    val fileText = File(inputName).readText()
     val ans = mutableMapOf<String, Int>()
 
     for (str in substrings)
-        ans[str] = fileText.split(str.toLowerCase()).size - 1
+        ans[str] = Regex("(?=($str))", RegexOption.IGNORE_CASE).findAll(fileText).count()
 
     return ans
 }
@@ -94,15 +94,18 @@ fun sibilants(inputName: String, outputName: String)
     val letterAssociation = mapOf('Ы' to 'И', 'Ю' to 'У', 'Я' to 'А')
     val fileTextList = File(inputName).readText()
     val sb = StringBuilder(fileTextList)
-    var isCapital = false
+    var isCapital: Boolean
 
     fileTextList.forEachIndexed { index, it ->
         if (letters.contains(it.toUpperCase()))
         {
-            isCapital = fileTextList[index + 1].isUpperCase()
-            if (letterAssociation.containsKey(fileTextList[index + 1].toUpperCase()))
-                sb[index + 1] = letterAssociation.getValue(fileTextList[index + 1].toUpperCase())
-            if (isCapital) sb[index + 1] = sb[index + 1].toUpperCase() else sb[index + 1] = sb[index + 1].toLowerCase()
+            if (index != fileTextList.length - 1)
+            {
+                isCapital = fileTextList[index + 1].isUpperCase()
+                if (letterAssociation.containsKey(fileTextList[index + 1].toUpperCase()))
+                    sb[index + 1] = letterAssociation.getValue(fileTextList[index + 1].toUpperCase())
+                if (isCapital) sb[index + 1] = sb[index + 1].toUpperCase() else sb[index + 1] = sb[index + 1].toLowerCase()
+            }
         }
     }
 
@@ -209,7 +212,7 @@ fun alignFileByWidth(inputName: String, outputName: String)
 fun top20Words(inputName: String): Map<String, Int>
 {
     val regex = Regex("[a-zA-Zа-яА-ЯёЁ]+")
-    var ans = mutableMapOf<String, Int>()
+    val ans = mutableMapOf<String, Int>()
     val fileText = File(inputName).readText()
 
     regex.findAll(fileText)
@@ -264,7 +267,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val outFileWriter = File(outputName).bufferedWriter()
     var let: Int = inFileReader.read()
 
-    while (let != -1)
+    while (let != - 1)
     {
         outFileWriter.write(transformLetter(let.toChar(),
                 dictionary.mapKeys { it.key.toLowerCase() }.mapValues { it.value.toLowerCase() }))
@@ -306,9 +309,10 @@ fun transformLetter(ch: Char, dic: Map<Char, String>): String =
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String)
 {
-    val words = File(inputName).readLines().map { it.toLowerCase() }
+    var words = File(inputName).readLines().map { it.toLowerCase() }
     var maxLength = 0
 
+    words = words.filter { checkChaoticness(it) }
     words.forEach { if (maxLength < it.length) maxLength = it.length }
 
     File(outputName).writeText(words
@@ -510,60 +514,64 @@ fun markdownToHtml(inputName: String, outputName: String)
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String)
 {
-    val plus = mutableListOf<Int>()
-    val proizv = lhv * rhv
+    val intAddends = mutableListOf<Int>()
+    val composition = lhv * rhv
 
     var n = rhv
-    var ost: Int
+    var rem: Int
 
     while (n != 0)
     {
-        ost = n % 10
+        rem = n % 10
         n /= 10
 
-        plus.add(ost * lhv)
+        intAddends.add(rem * lhv)
     }
 
-    val plusStr = mutableListOf<String>()
+    val strAddends = mutableListOf<String>()
 
-    plus.forEachIndexed { ind, num -> plusStr.add(ind, num.toString()); repeat(ind) {plusStr[ind] += " "} }
+    intAddends.forEachIndexed { ind, num ->
+        strAddends.add(ind, num.toString())
+        repeat(ind) { strAddends[ind] += " " }
+    }
 
-    val stick = CharArray(plusStr[plusStr.size - 1].length + 1) {'-'}.joinToString("", "")
-    val maxLength = plusStr[plusStr.size - 1].length + 1
+    val maxLength = composition.toString().length + 1
+    val separator = CharArray(maxLength) { '-' }.joinToString("", "")
+
 
     val sb = StringBuilder("")
     val writer = File(outputName).bufferedWriter()
 
-    CharArray(maxLength - lhv.toString().length) {' '}.joinTo(sb, "")
+    CharArray(maxLength - lhv.toString().length) { ' ' }.joinTo(sb, "")
     sb.append(lhv)
     writer.write(sb.toString())
     writer.newLine()
     sb.setLength(0)
 
     sb.append("*")
-    CharArray(maxLength - rhv.toString().length - 1) {' '}.joinTo(sb, "")
+    CharArray(maxLength - rhv.toString().length - 1) { ' ' }.joinTo(sb, "")
     sb.append(rhv)
     writer.write(sb.toString())
     writer.newLine()
     sb.setLength(0)
 
-    writer.write(stick)
+    writer.write(separator)
     writer.newLine()
 
-    for (it in plusStr)
+    for (it in strAddends)
     {
-        if (plusStr[0] !== it) sb.append("+") else sb.append(" ")
-        CharArray(maxLength - it.length - 1) {' '}.joinTo(sb, "")
+        if (strAddends[0] !== it) sb.append("+") else sb.append(" ")
+        CharArray(maxLength - it.length - 1) { ' ' }.joinTo(sb, "")
         sb.append(it)
         writer.write(sb.toString().trimEnd())
         writer.newLine()
         sb.setLength(0)
     }
 
-    writer.write(stick)
+    writer.write(separator)
     writer.newLine()
 
-    writer.write(" " + proizv.toString())
+    writer.write(" " + composition.toString())
     writer.close()
 
 
