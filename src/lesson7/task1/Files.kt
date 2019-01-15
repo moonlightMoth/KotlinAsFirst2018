@@ -3,6 +3,11 @@
 package lesson7.task1
 
 import java.io.File
+import java.io.IOException
+import java.lang.Exception
+import java.lang.IllegalArgumentException
+import java.lang.IndexOutOfBoundsException
+import java.lang.NumberFormatException
 import java.lang.StringBuilder
 
 /**
@@ -44,7 +49,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String)
                 else
                 {
                     outputStream.write(" ")
-                    currentLineLength ++
+                    currentLineLength++
                 }
             }
             outputStream.write(word)
@@ -267,7 +272,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val outFileWriter = File(outputName).bufferedWriter()
     var let: Int = inFileReader.read()
 
-    while (let != - 1)
+    while (let != -1)
     {
         outFileWriter.write(transformLetter(let.toChar(),
                 dictionary.mapKeys { it.key.toLowerCase() }.mapValues { it.value.toLowerCase() }))
@@ -602,4 +607,140 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String)
 {
     TODO()
 }
+
+
+fun chooseAppropriateFlats(inputName: String, query: String): Set<String>
+{
+    val fileStringsList = File(inputName).readLines()
+    val flatsList = mutableListOf<Flat>()
+    val queryList = query.split("; ")
+    val queryRooms = mutableListOf<Room>()
+    val answer = mutableSetOf<String>()
+
+
+    for (room in queryList)
+    {
+        val roomSplitted = room.split(' ')
+        try
+        {
+            queryRooms.add(Room(roomSplitted[0], roomSplitted[1].toInt()))
+        }
+        catch (e: IndexOutOfBoundsException)
+        {
+            throw IllegalArgumentException()
+        }
+        catch (e: NumberFormatException)
+        {
+            throw NumberFormatException()
+        }
+    }
+
+    for (str in fileStringsList)
+    {
+        val flat: String
+        val roomsList: List<String>
+
+        try
+        {
+            flat = str.substring(0, str.indexOf(':'))
+            roomsList = str.drop(flat.length + 2).split(", ")
+        }
+        catch (e: IndexOutOfBoundsException)
+        {
+            throw IllegalArgumentException()
+        }
+
+        val roomsPairsList = mutableListOf<Room>()
+
+        for (room in roomsList)
+        {
+            val roomSplitted = room.split(' ')
+
+            try
+            {
+                roomsPairsList.add(Room(roomSplitted[0], roomSplitted[1].toInt()))
+            }
+            catch (e: IndexOutOfBoundsException)
+            {
+                throw IllegalArgumentException()
+            }
+            catch (e: NumberFormatException)
+            {
+                throw NumberFormatException()
+            }
+        }
+
+        flatsList.add(Flat(flat, roomsPairsList))
+    }
+
+    var flatRate: Int
+
+    for ((address, roomList) in flatsList)
+    {
+        val usedRooms = Array(roomList.size) { false }
+        flatRate = 0
+
+        for (queryRoom in queryRooms)
+        {
+            for (room in roomList)
+            {
+                if (room.name == queryRoom.name && room.area >= queryRoom.area && !usedRooms[roomList.indexOf(room)])
+                {
+                    usedRooms[roomList.indexOf(room)] = true
+                    flatRate++
+                    break
+                }
+            }
+        }
+
+        if (flatRate == queryRooms.size)
+            answer.add(address)
+    }
+
+    return answer
+}
+
+data class Flat(val address: String, val roomList: List<Room>)
+
+data class Room(val name: String, val area: Int) : Comparable<Room>
+{
+    override fun compareTo(other: Room): Int
+    {
+        if (this.area > other.area)
+            return 1
+        if (this.area == other.area)
+            return 0
+        if (this.area < other.area)
+            return -1
+        return -2
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

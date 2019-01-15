@@ -1,9 +1,11 @@
 package lesson7.task1
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.io.IOException
 
 class Tests {
 
@@ -427,4 +429,36 @@ Basic, Ruby, Swift.
 
         File("temp.txt").delete()
     }
+
+
+    @Test
+    fun chooseAppropriateFlat() {
+        assertEquals(setOf("rfgtgh 4-33", "ujhujh 56-12"),
+                chooseAppropriateFlats("input/exam_in1.txt", "asd 30"))
+
+        assertEquals(setOf("rfgtgh 4-33"),
+                chooseAppropriateFlats("input/exam_in1.txt", "asa 10; asa 20"))
+
+        assertEquals(setOf("qweqwe 9-17", "ujhujh 56-12"),
+                chooseAppropriateFlats("input/exam_in1.txt", "asd 10; zxc 20"))
+
+        assertEquals(setOf<String>(),
+                chooseAppropriateFlats("input/exam_in1.txt", "asd 300"))
+
+        assertEquals(setOf("fghfgh 5-33", "rfgtgh 4-33"),
+                chooseAppropriateFlats("input/exam_in5.txt", "tde 10; yfd 10; yfd 10"))
+
+        assertEquals(setOf("fghfgh 5-33", "rfgtgh 4-33", "qweqwe 9-17"),
+                chooseAppropriateFlats("input/exam_in5.txt", "tde 10; yfd 10; yfd 4"))
+
+        assertEquals(setOf("fghfgh 5-33"),
+                chooseAppropriateFlats("input/exam_in5.txt", "tde 10; yfd 4; yfd 40"))
+
+        Assertions.assertThrows(IllegalArgumentException::class.java) { chooseAppropriateFlats("input/exam_in2.txt", "asd 30") }
+        Assertions.assertThrows(IllegalArgumentException::class.java) { chooseAppropriateFlats("input/exam_in1.txt", "asdsdnijen") }
+        Assertions.assertThrows(IllegalArgumentException::class.java) { chooseAppropriateFlats("input/exam_in3.txt", "asd 1") }
+        Assertions.assertThrows(IOException::class.java) { chooseAppropriateFlats("input/asdasd.txt", "asd 1") }
+
+    }
+
 }
